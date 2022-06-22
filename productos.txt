@@ -1,0 +1,1 @@
+[{"title":"Buzo","price":4500,"url":"imgbuzo.jpg","id":1},{"title":"Pantalon","price":3000,"url":"imgpantalon.jpg","id":2},{"title":"Remera","price":1500,"url":"imgremera.jpg","id":3},{"title":"Zapatillas","price":7500,"url":"zapatillas.jpg","id":4}]
