@@ -1,86 +1,87 @@
-const express = require('express');
+const { Router } = require('express');
+
+const express = require('express')
 const app = express();
-const fs = require('fs');
 
+const routerMascotas = Router();
+const routerPersonas = Router();
 
-class Contenedor {
-    constructor(file){
-        this.file = file
-    }
+app.use('/mascotas', routerMascotas);
+app.use('/personas', routerPersonas);
 
-    getAll(){
-        const data = JSON.parse(fs.readFileSync(this.file, 'utf-8'))
-        console.log(data)
-        return data
-    }
-    saveProduct(product){
-        let listado = this.getAll();
-        product.id = listado.length+1        
-        listado.push(product)
-        fs.writeFile(this.file, `${JSON.stringify(listado)}`, error => {
-            if (error){
-                console.log('Hubo un problema al guardar el archivo')
-            }else {
-                console.log(`Se guardó el producto bajo el ID ${product.id}`)
-            }
-        })
-    }
+routerMascotas.use(express.json());
+routerPersonas.use(express.json());
+routerMascotas.use(express.urlencoded({extended : true}));
+routerPersonas.use(express.urlencoded({extended : true}))
 
-    getByID(id){
-        let list = this.getAll();
-        console.log(list.find(el => el.id === id))        
-    }
+app.use(express.static('files'));
 
-    deleteByID(id){
-        let list2 = this.getAll();
-        let indexToSplice = list2.findIndex(el => el.id === id);
-        list2.splice(indexToSplice,1);
-        fs.writeFile(this.file, `${JSON.stringify(list2)}`, error=> {
-            if (error) {
-                console.log('Ha ocurrido un error al escribir el archivo')
-            } else {
-                console.log('Se ha guardado correctamente')
-            }
-        });
-        console.log(list2);
-    }
+const mascotas = [];
 
-    deleteAll(){
-        let list3 = this.getAll();
-        list3 = [];
-        fs.writeFile(this.file, `${JSON.stringify(list3)}`, error=> {
-            if (error) {
-                console.log('Ha ocurrido un error al escribir el archivo')
-            } else {
-                console.log('Se ha guardado correctamente')
-            }
-        })
-    }
-}
-
-const listado = new Contenedor('./productos.txt');
-
-app.get('/', (req, res)=>{
-    res.send('<h1 style="color:brown">Bienvenidos<h1/>')
-});
-
-
-app.get('/productos',(req,res) => {
-    res.send(`Listado de productos: ${listado.getAll()}`)
+routerMascotas.get('/listar', (req, res) => {
+    res.json(mascotas)
 })
 
-app.get('/productorandom', (req,res) => {
-    const randomNumber = (min, max) => {
-        return Math.floor(Math.random()*(max-min+1)+min);
-    };
-    let randomSelected = listado.getByID(1);
-    console.log(randomNumber(1,7))
-    res.send(`Se seleccionó aleatoriamente el item: ${randomSelected}`)
+routerMascotas.post('/guardar', (req, res) => {
+    
+    mascotas.push(req.body);
+    res.json(req.body)
 })
+
+
 
 const PORT = 8080;
+const server = app.listen(PORT, ()=> {
+    console.log('Server escuchando')
+});
 
-const server = app.listen(PORT, ()=>{
-    console.log(`Server http escuchando en ${server.address().port}`)
-})
-server.on("error", error => console.log(error))
+server.on('error', error => console.log(error))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const frase = "Hola Mundo como estan"
+
+// app.get('/api/frase', (req, res) => {
+//     res.send(frase)
+// })
+
+// app.get('/api/letras/:num', (res,req)=>{
+//     const num = parseInt(req.params.num);
+
+//     if (isNaN(num)){
+//         return res.send({error: 'El parametro no es un numero'})
+//     }
+//     if (num < 1 || num > frase.length) {
+//         return res.send({error: 'Fuera de rango'})
+//     }
+
+//     res.send(frase[num - 1])
+// })
+
+// app.get('/api/palabras/:num', (req, res) => {
+//     const num = parseInt(req.params.num)
+
+//     if (isNaN(num)){
+//         return res.send({error : 'El parametro ingresado no es un numero'})
+//     }
+//     const palabras = frase.split(' ');
+//     if (num < 1 || num > palabras.length){
+//         return res.send({error: 'Está fuera de rango'})
+//     }
+
+//     res.send(palabras[num -1])
+// })
