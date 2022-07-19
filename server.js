@@ -1,87 +1,72 @@
-const { Router } = require('express');
+// const fs = require('fs');
 
-const express = require('express')
-const app = express();
-
-const routerMascotas = Router();
-const routerPersonas = Router();
-
-app.use('/mascotas', routerMascotas);
-app.use('/personas', routerPersonas);
-
-routerMascotas.use(express.json());
-routerPersonas.use(express.json());
-routerMascotas.use(express.urlencoded({extended : true}));
-routerPersonas.use(express.urlencoded({extended : true}))
-
-app.use(express.static('files'));
-
-const mascotas = [];
-
-routerMascotas.get('/listar', (req, res) => {
-    res.json(mascotas)
-})
-
-routerMascotas.post('/guardar', (req, res) => {
-    
-    mascotas.push(req.body);
-    res.json(req.body)
-})
-
-
-
-const PORT = 8080;
-const server = app.listen(PORT, ()=> {
-    console.log('Server escuchando')
-});
-
-server.on('error', error => console.log(error))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const frase = "Hola Mundo como estan"
-
-// app.get('/api/frase', (req, res) => {
-//     res.send(frase)
-// })
-
-// app.get('/api/letras/:num', (res,req)=>{
-//     const num = parseInt(req.params.num);
-
-//     if (isNaN(num)){
-//         return res.send({error: 'El parametro no es un numero'})
-//     }
-//     if (num < 1 || num > frase.length) {
-//         return res.send({error: 'Fuera de rango'})
+// class Contenedor {
+//     constructor(file){
+//         this.file = file
 //     }
 
-//     res.send(frase[num - 1])
-// })
-
-// app.get('/api/palabras/:num', (req, res) => {
-//     const num = parseInt(req.params.num)
-
-//     if (isNaN(num)){
-//         return res.send({error : 'El parametro ingresado no es un numero'})
+//     getAll(){
+//         const data = JSON.parse(fs.readFileSync(this.file, 'utf-8'))
+//         console.log(data)
+//         return data
 //     }
-//     const palabras = frase.split(' ');
-//     if (num < 1 || num > palabras.length){
-//         return res.send({error: 'Está fuera de rango'})
+//     saveProduct(product){
+//         let listado = this.getAll();
+//         product.id = listado.length+1        
+//         listado.push(product)
+//         fs.writeFile(this.file, `${JSON.stringify(listado)}`, error => {
+//             if (error){
+//                 console.log('Hubo un problema al guardar el archivo')
+//             }else {
+//                 console.log(`Se guardó el producto bajo el ID ${product.id}`)
+//             }
+//         })
 //     }
 
-//     res.send(palabras[num -1])
-// })
+//     getByID(id){
+//         let list = this.getAll();
+//         console.log(list.find(el => el.id === id))        
+//     }
+
+//     deleteByID(id){
+//         let list2 = this.getAll();
+//         let indexToSplice = list2.findIndex(el => el.id === id);
+//         list2.splice(indexToSplice,1);
+//         fs.writeFile(this.file, `${JSON.stringify(list2)}`, error=> {
+//             if (error) {
+//                 console.log('Ha ocurrido un error al escribir el archivo')
+//             } else {
+//                 console.log('Se ha guardado correctamente')
+//             }
+//         });
+//         console.log(list2);
+//     }
+
+//     deleteAll(){
+//         let list3 = this.getAll();
+//         list3 = [];
+//         fs.writeFile(this.file, `${JSON.stringify(list3)}`, error=> {
+//             if (error) {
+//                 console.log('Ha ocurrido un error al escribir el archivo')
+//             } else {
+//                 console.log('Se ha guardado correctamente')
+//             }
+//         })
+//     }
+// }
+
+
+
+// const zapatillas = {
+//     title: 'Zapatillas',
+//     price: 7500,
+//     url: 'zapatillas.jpg'
+//     }
+
+// const listado = new Contenedor('./productos.txt');
+
+
+// // listado.saveProduct(zapatillas);
+// // listado.getByID(5);
+// // listado.deleteByID(2);
+// //listado.deleteAll();
