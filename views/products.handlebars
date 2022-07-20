@@ -1,0 +1,21 @@
+<h2>Productos</h2>
+{{#each response}}
+    <div style="border: green 1px 1px; border-style: dotted; margin: 15px; display: inline-block">
+        <h5>{{title}}</h5>
+        <h5>{{price}}</h5>
+        <p>{{url}}</p>
+        <p>{{id}}</p>
+    </div>
+{{/each}}
+<h2>Carga de productos</h2>
+<h1>Formulario de carga de productos</h1>
+<form action="/api/productos" method="post">
+    <h5>Nombre del producto</h5>
+    <input type="text" name="title" placeholder="Nombre del producto">
+    <h5>Precio</h5>
+    <input type="number" name="price" placeholder="Precio">
+    <h5>Imagen</h5>
+    <input type="text" name="url" placeholder="Direccion de la imagen">
+    <button type="submit" value="Enviar">Agregar</button>
+</form>
+<button><a href="./">Volver</a></button>
